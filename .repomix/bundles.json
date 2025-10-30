@@ -1,0 +1,13 @@
+{
+  "bundles": {
+    "remoteControl-108": {
+      "name": "remoteControl",
+      "created": "2025-10-30T14:48:37.949Z",
+      "lastUsed": "2025-10-30T14:49:13.904Z",
+      "tags": [],
+      "files": [
+        "src"
+      ]
+    }
+  }
+}

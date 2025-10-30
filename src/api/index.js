@@ -3,13 +3,11 @@ import request from '@/utils/request';
 
 export function editMusicStatus({
   sort,
-  heartWallId,
-  heart_wall_id: heartWallIdSnake,
+  heart_wall_id,
 }) {
-  const targetHeartWallId = heartWallId || heartWallIdSnake;
   return request.post('hmGiftController/editMusicStatus', {
     splid: store.state.liveId,
-    heartWallId: targetHeartWallId,
+    heart_wall_id,
     sort,
   });
 }

@@ -43,9 +43,9 @@ export default {
   max-width: 500px;
   height: 120px;
   border-radius: 24px;
-  background: linear-gradient(90deg, #ffad49 0%, #ff7849 100%);
+  background: #fff;
   border: none;
-  color: #ffffff;
+  color: #3e80f8;
   font-size: 36px;
   font-weight: 600;
   letter-spacing: 4px;

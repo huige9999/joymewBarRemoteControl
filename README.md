@@ -55,5 +55,5 @@ npm install
 
 
 ```
-http://dev.joymew.com:82/hm-remotecontrol/#/controller?liveid=b1262b2b14374f55abdda90f14b4624b&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHQiOjE3NjE4MTcwNDc2NTcsInVpZCI6ImY2YWI4Njk1NjFhMjQyOTlhYThiYWY3MjhkNTQ5YjIzIiwiaWF0IjoxNzYwMDg5MDQ3NjU3fQ.Fnr4gVMp8amCiJcpOuW3gZktFX3e05Wgi2hYcDI0YEg
+http://dev.joymew.com:82/hm-remotecontrol/#/controller?liveid=3f4e2db4c05649479b3bdcf7dbb146cd&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHQiOjE3NjM1OTI5MTk5MDgsInVpZCI6ImY2YWI4Njk1NjFhMjQyOTlhYThiYWY3MjhkNTQ5YjIzIiwiaWF0IjoxNzYxODY0OTE5OTA4fQ.hE_ow2W3moaVFSrXcRyRl1oqCY0oThrrokw53n9vfnQ
 ```

@@ -185,6 +185,8 @@ export default {
         return;
       }
       const tmpNextSongSort = this.songOrderList[this.currentSongOrderIndex + 1].sort;
+      // 打印下一首歌曲
+      console.log('下一首歌曲:', this.songOrderList[this.currentSongOrderIndex + 1]);
       if (tmpNextSongSort === 1) {
         this.$dialog
           .confirm({
@@ -315,6 +317,7 @@ export default {
 }
 .page-title-wrap {
   position: relative;
+  margin-bottom: 40px;
 }
 .back-button {
   position: absolute;
