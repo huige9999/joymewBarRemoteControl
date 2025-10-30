@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+  <!-- <title><%= htmlWebpackPlugin.options.title %></title> -->
+  <title>遥控器</title>
+</head>
+
+<body>
+  <noscript>
+    <strong>
+      We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please
+        enable it to
+        continue.
+    </strong>
+  </noscript>
+  <!-- <script>
+    function monitor({
+      version = '1.0.0', // 每次发布版本号都要修改
+      env = 'prod', // 环境，取值 prod | local
+    }) {
+      !(function (c, b, d, a) {
+        function getLiveId() {
+          const urlWithNoHash = c.location.href.replace('#', '');
+          const tmpUrl = new URL(urlWithNoHash);
+          const tmpSearchParams = tmpUrl.searchParams;
+          return tmpSearchParams.get('liveid');
+        }
+        c[a] || (c[a] = {});
+        c[a] = {
+          pid: 'at8s0h9yjv@5cd0055a6bac764',
+          endpoint: 'https://at8s0h9yjv-default-cn.rum.aliyuncs.com',
+          spaMode: 'hash',
+          version,
+          env,
+          user: {
+            tags: getLiveId(),
+          },
+          collectors: {
+            api: false,
+            staticResource: false,
+            action: false,
+          },
+        };
+        with (b) with (body) with (insertBefore(createElement('script'), firstChild)) setAttribute('crossorigin', '', (src = d));
+      })(window, document, 'https://sdk.rum.aliyuncs.com/v2/browser-sdk.js', '__rum');
+    }
+    const env = '<%= process.env.NODE_ENV %>';
+    if (env === 'production') {
+      monitor({
+        version: '1.3.0',
+        env: 'prod',
+      });
+      function rewriteConsole() {
+        // 重写console.log 做额外的事：上报日志
+        const ArmsRum = window.RumSDK.default;
+        const oldConsoleLog = console.log;
+        console.log = function () {
+          oldConsoleLog.apply(console, arguments);
+          // 发送日志到服务器
+          ArmsRum.sendCustom({
+            type: 'consoleLog',
+            name: arguments,
+            value: window.location.href,
+          })
+        };
+      }
+      window.onload = function () {
+        rewriteConsole();
+      }
+    }
+  </script> -->
+  <div id="app"></div>
+  <!-- built files will be auto injected -->
+</body>
+
+</html>

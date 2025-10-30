@@ -1,0 +1,89 @@
+.publicHvCenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.publicHCenter {
+    display: flex;
+    justify-content: center;
+}
+
+.publicVCenter {
+    display: flex;
+    align-items: center;
+}
+
+.van-toast {
+    width: auto;
+    font-size: 32px;
+    padding: 15px 25px;
+    line-height: 48px;
+}
+.van-toast__icon {
+    font-size: 48px;
+}
+.van-dialog {
+    width: 65vw;
+    font-size: 4.2vw;
+}
+ .van-dialog__message--has-title {
+    padding-top: 5.2vw;
+}
+.van-dialog__message {
+    font-size: 3.8vw;
+}
+.van-dialog__cancel,.van-dialog__confirm {
+    height: 10vw;
+}
+.van-button__content {
+    font-size: 3.8vw;
+}
+html,body,#app {
+    height: 100%;
+    background-color: #fff;
+}
+div {
+    box-sizing: border-box;
+}
+
+/* 自定义加入黑名单确认弹窗的样式 */
+.custom-blacklist-dialog {
+    width: 77vw;
+    border-radius: 22px;
+}
+
+.custom-blacklist-dialog > .van-dialog__content > .van-dialog__message {
+    font-size: 28px;
+    font-weight: 500;
+}
+.custom-blacklist-dialog > .van-dialog__content {
+    height: 132px;
+}
+.custom-blacklist-dialog [class*=van-hairline]:after {
+    border: none;
+}
+.custom-blacklist-dialog > .van-dialog__content > .van-dialog__message {
+    padding: 3.467vw 1.6vw;
+}
+.custom-blacklist-dialog > .van-dialog__footer {
+    padding-bottom: 43px;
+}
+
+.custom-blacklist-dialog > .van-dialog__footer > .van-button > .van-button__content > .van-button__text{
+    width: 211px;
+    height: 75px;
+    background: #E6E4E4;
+    border-radius: 19px 19px 19px 19px;
+    display: block;
+    text-align: center;
+    line-height: 75px;
+    font-size: 34px;
+    color: #4D4E50;
+    font-weight: 500;
+}
+
+.custom-blacklist-dialog > .van-dialog__footer > .van-dialog__confirm> .van-button__content > .van-button__text{
+    background: #5998FF;
+    color: #fff;
+}
