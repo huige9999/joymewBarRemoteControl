@@ -1,13 +1,10 @@
 <template>
-    <div class="sign-wrap">
-      <PageTitleWrap :pageTitle="pageTitle" />
-      <div class="songList" :class="{ 'songList-empty': songOrderList.length === 0 }">
-        <template v-if="songOrderList.length > 0">
+  <div class="sign-wrap">
+    <PageTitleWrap :pageTitle="pageTitle" />
+    <div class="songList" :class="{ 'songList-empty': songOrderList.length === 0 }">
+      <template v-if="songOrderList.length > 0">
         <div
           class="songItem"
-          @click="chooseTargetSongOrder(item)"
-          @touchstart="startPress(item)"
-          @touchend="stopPress"
           v-for="item in songOrderList"
           :key="item.heart_wall_id"
           :class="{
@@ -15,21 +12,25 @@
             end: item.sort === 1 && currentSongOrderId !== item.heart_wall_id,
             in: currentSongOrderId === item.heart_wall_id,
           }"
+          @click="chooseTargetSongOrder(item)"
+          @touchstart="startPress(item)"
+          @touchend="stopPress"
         >
           <div class="songName">{{ item.title }}</div>
           <div class="songStatus">{{ statusFilter(item.sort, item.heart_wall_id) }}</div>
         </div>
-        </template>
-        <template v-else>
-          <div class="no-song">暂无歌曲</div>
-        </template>
-      </div>
-      <div class="func-button-container">
-        <FuncButton @click="prevSongOrder" class="func-button">上一首</FuncButton>
-        <FuncButton @click="nextSongOrder" class="func-button">下一首</FuncButton>
-      </div>
+      </template>
+      <template v-else>
+        <div class="no-song">暂无歌曲</div>
+      </template>
     </div>
-  </template>
+    <div class="func-button-container">
+      <FuncButton @click="prevSongOrder" class="func-button">上一首</FuncButton>
+      <FuncButton @click="nextSongOrder" class="func-button">下一首</FuncButton>
+    </div>
+  </div>
+</template>
+
 <script>
 import { mapState } from 'vuex';
 import PageTitleWrap from '@/views/v2/components/PageTitle.vue';
@@ -37,12 +38,56 @@ import FuncButton from '@/views/v2/components/FuncButton.vue';
 import { editMusicStatus, getMusicList } from '@/api/index';
 
 export default {
+  name: 'OrderSong',
+  components: {
+    PageTitleWrap,
+    FuncButton,
+  },
   data() {
     return {
       pressTimer: null,
       songOrderList: [],
       currentSongOrderId: undefined,
+      pageTitle: '点歌',
     };
+  },
+  computed: {
+    ...mapState({
+      currentSongId: (state) => state.currentSongId,
+    }),
+    currentSongOrderIndex() {
+      return this.songOrderList.findIndex((item) => item.heart_wall_id === this.currentSongOrderId);
+    },
+    songOrderListLength() {
+      return this.songOrderList.length;
+    },
+  },
+  created() {
+    this.requestMusicList();
+  },
+  watch: {
+    currentSongId: {
+      handler(newVal) {
+        if (newVal) {
+          this.currentSongOrderId = newVal;
+          const targetIndex = this.songOrderList.findIndex((item) => item.heart_wall_id === this.currentSongOrderId);
+          editMusicStatus({
+            heart_wall_id: this.currentSongOrderId,
+            sort: 1,
+          })
+            .then(() => {
+              this.requestMusicList(targetIndex);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      },
+      setter(newVal) {
+        return newVal;
+      },
+      immediate: true,
+    },
   },
   methods: {
     prevSongOrder() {
@@ -100,12 +145,10 @@ export default {
           })
           .then(() => {
             editMusicStatus({
-              // heart_wall_id: targetSongOrder.heart_wall_id,
               heart_wall_id: this.currentSongOrderId,
               sort: 1,
             })
-              .then((res) => {
-                console.log('修改状态:', res);
+              .then(() => {
                 this.requestMusicList(targetSongOrderIndex);
               })
               .catch((err) => {
@@ -115,12 +158,10 @@ export default {
           .catch(() => {});
       } else {
         editMusicStatus({
-          // heart_wall_id: targetSongOrder.heart_wall_id,
           heart_wall_id: this.currentSongOrderId,
           sort: 1,
         })
-          .then((res) => {
-            console.log('修改状态:', res);
+          .then(() => {
             this.requestMusicList(targetSongOrderIndex);
           })
           .catch((err) => {
@@ -173,9 +214,11 @@ export default {
     statusFilter(status, id) {
       if (id === this.currentSongOrderId) {
         return '进行中';
-      } if (status === 0) {
+      }
+      if (status === 0) {
         return '待唱';
-      } if (status === 1) {
+      }
+      if (status === 1) {
         return '已唱';
       }
       return '其他状态';
@@ -183,9 +226,9 @@ export default {
     requestMusicList(targetIndex) {
       getMusicList()
         .then((res) => {
-          this.songOrderList = res.data.list;
+          this.songOrderList = res.data.list || [];
           if (targetIndex > -1) {
-            this.currentSongOrderId = this.songOrderList[targetIndex].heart_wall_id;
+            this.currentSongOrderId = this.songOrderList[targetIndex]?.heart_wall_id;
             this.updateData(this.currentSongOrderId);
           } else if (targetIndex === -1) {
             this.updateData('noneId');
@@ -225,8 +268,7 @@ export default {
             heart_wall_id: targetSongOrder.heart_wall_id,
             sort: 0,
           })
-            .then((res) => {
-              console.log('修改状态:', res);
+            .then(() => {
               this.requestMusicList(-1);
             })
             .catch((err) => {
@@ -258,133 +300,81 @@ export default {
       }
     },
   },
-  name: 'pageWithTitle',
-  components: {
-    PageTitleWrap,
-    FuncButton,
-  },
-  created() {
-    this.requestMusicList();
-  },
-  computed: {
-    ...mapState('menu', ['selectedLeafMenu']),
-    ...mapState({
-      currentSongId: (state) => state.currentSongId,
-    }),
-    pageTitle() {
-      return this.selectedLeafMenu.name ? this.selectedLeafMenu.name : '';
-    },
-    currentSongOrderIndex() {
-      return this.songOrderList.findIndex((item) => item.heart_wall_id === this.currentSongOrderId);
-    },
-    songOrderListLength() {
-      return this.songOrderList.length;
-    },
-  },
-  watch: {
-    selectedLeafMenu(newVal, oldVal) {
-      if (newVal !== oldVal) {
-        this.$store.commit('updateCurrentMiniGameAnswer', '');
-      }
-    },
-    currentSongId: {
-      handler(newVal) {
-        if (newVal) {
-          this.currentSongOrderId = newVal;
-          const targetIndex = this.songOrderList.findIndex((item) => item.heart_wall_id === this.currentSongOrderId);
-          // editMusicStatus 需引入
-          editMusicStatus({
-            heart_wall_id: this.currentSongOrderId,
-            sort: 1,
-          })
-            .then(() => {
-              this.requestMusicList(targetIndex);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        }
-      },
-      setter(newVal) {
-        return newVal;
-      },
-      immediate: true,
-    },
-  },
 };
 </script>
-  <style scoped>
-  .sign-wrap {
-    height: 100%;
-  }
-  .func-button-container {
-    display: flex;
-    margin-top: 39px;
-    justify-content: center;
-    margin-top: 5.2vw;
-    flex-wrap: wrap;
-    align-items: center;
-    row-gap: 4vw;
-    column-gap: 4vw;
-    padding: 0 4vw;
-  }
-  .songList {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    height: 400px;
-    overflow-y: scroll;
-  }
-  .songList-empty {
-    height: 100px;
-    justify-content: center;
-  }
-  .no-song {
-    font-size: 36px;
-    color: #333333;
-  }
-  .songItem {
-    flex-shrink: 0;
-    border-radius: 20px;
-    display: flex;
-    justify-content: space-between;
-    width: 686px;
-    height: 100px;
-    padding: 0 32px;
-    align-items: center;
-  }
-  .songName {
-    font-size: 32px;
-  }
-  .songStatus {
-    font-size: 32px;
-  }
-  .songItem.wait {
-    background: linear-gradient(180deg, #544ba8, #544ba8 100%);
-  }
-  .songItem.wait .songName {
-    color: #ece9ff;
-  }
-  .songItem.wait .songStatus {
-    color: #ffffff;
-  }
-  .songItem.in {
-    background-color: #ffffff;
-  }
-  .songItem.in .songName {
-    color: #333333;
-  }
-  .songItem.in .songStatus {
-    color: #fb5aa7;
-  }
-  .songItem.end {
-    background-color: #2b243f;
-  }
-  .songItem.end .songName {
-    color: #ece9ff;
-  }
-  .songItem.end .songStatus {
-    color: #ffffff;
-  }
-  </style>
+
+<style scoped>
+.sign-wrap {
+  height: 100%;
+}
+.func-button-container {
+  display: flex;
+  margin-top: 39px;
+  justify-content: center;
+  margin-top: 5.2vw;
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: 4vw;
+  column-gap: 4vw;
+  padding: 0 4vw;
+}
+.songList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  height: 400px;
+  overflow-y: scroll;
+}
+.songList-empty {
+  height: 100px;
+  justify-content: center;
+}
+.no-song {
+  font-size: 36px;
+  color: #333333;
+}
+.songItem {
+  flex-shrink: 0;
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-between;
+  width: 686px;
+  height: 100px;
+  padding: 0 32px;
+  align-items: center;
+}
+.songName {
+  font-size: 32px;
+}
+.songStatus {
+  font-size: 32px;
+}
+.songItem.wait {
+  background: linear-gradient(180deg, #544ba8, #544ba8 100%);
+}
+.songItem.wait .songName {
+  color: #ece9ff;
+}
+.songItem.wait .songStatus {
+  color: #ffffff;
+}
+.songItem.in {
+  background-color: #ffffff;
+}
+.songItem.in .songName {
+  color: #333333;
+}
+.songItem.in .songStatus {
+  color: #fb5aa7;
+}
+.songItem.end {
+  background-color: #2b243f;
+}
+.songItem.end .songName {
+  color: #ece9ff;
+}
+.songItem.end .songStatus {
+  color: #ffffff;
+}
+</style>
