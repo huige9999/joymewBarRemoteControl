@@ -1,6 +1,9 @@
 <template>
   <div class="sign-wrap">
-    <PageTitleWrap :pageTitle="pageTitle" />
+    <div class="page-title-wrap">
+      <button class="back-button" @click="handleBackToMenu">返回</button>
+      <PageTitleWrap :pageTitle="pageTitle" />
+    </div>
     <div class="songList" :class="{ 'songList-empty': songOrderList.length === 0 }">
       <template v-if="songOrderList.length > 0">
         <div
@@ -90,6 +93,9 @@ export default {
     },
   },
   methods: {
+    handleBackToMenu() {
+      this.$emit('back-to-menu');
+    },
     prevSongOrder() {
       if (this.currentSongOrderIndex === -1) {
         this.$toast('当前没有歌曲在唱!');
@@ -306,6 +312,25 @@ export default {
 <style scoped>
 .sign-wrap {
   height: 100%;
+}
+.page-title-wrap {
+  position: relative;
+}
+.back-button {
+  position: absolute;
+  left: 32px;
+  top: 64px;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 26px;
+  color: #ffffff;
+  font-size: 28px;
+  padding: 12px 32px;
+  backdrop-filter: blur(4px);
+}
+.back-button:active {
+  opacity: 0.8;
 }
 .func-button-container {
   display: flex;
